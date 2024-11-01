@@ -13,7 +13,8 @@ import { useContext } from "react"
 import { Button } from "./ui/button"
 
 export default function TableTask() {
-  const { tasks, finishedTask } = useContext(TaskContext)
+  const { tasks, finishedTask, page, setPage, totalPages } = useContext(TaskContext)
+  const currentPage = page
 
   const getStatusClass = (status: string)=>{
     switch(status){
@@ -31,46 +32,55 @@ export default function TableTask() {
   }
 
   return (
-    <Table className="border-2 border-muted-foreground">
-      <TableCaption>Essa é sua lista de tarefas.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Id</TableHead>
-          <TableHead>Título</TableHead>
-          <TableHead className="text-center">Status</TableHead>
-          <TableHead>Criado em</TableHead>
-          <TableHead>Vencimento em</TableHead>
-          <TableHead>Finalizado em</TableHead>
-          <TableHead className="text-center">Ações</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {tasks.map((task) =>(
-          <TableRow key={task.id}>
-            <TableCell className="font-medium">{task.id}</TableCell>
-            <TableCell>{task.title}</TableCell>
-            <TableCell className={`${getStatusClass(task.status)} flex items-center justify-center rounded-md`}>
-
-              {task.status}
-
-            </TableCell>
-            <TableCell>{new Date(task.createdAt).toLocaleDateString('pt-BR')}</TableCell>
-            <TableCell>{task.duDate ? new Date(task.duDate).toLocaleDateString('pt-BR') : ''}</TableCell>
-            <TableCell>{task.finishedAt ? new Date(task.finishedAt).toLocaleDateString('pt-BR') : ''}</TableCell>
-            <TableCell className="flex items-center justify-between">
-              <Button className="bg-red-700">
-                <Trash/>
-              </Button>
-              <Button className="bg-yellow-700">
-                <Pencil/>
-              </Button>
-              <Button disabled={task.finishedAt != null} onClick={task.finishedAt == null ? () => handleFinishedTask(task.id): undefined} className={`${task.finishedAt == null ? 'bg-green-800 hover:opacity-50' : 'bg-green-950 hover:opacity-50 disabled: opacity-50'}`}>
-                <CircleCheck/>
-              </Button>
-            </TableCell>
+    <div>
+      <Table className="border-2 border-muted-foreground">
+        <TableCaption>Essa é sua lista de tarefas.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Id</TableHead>
+            <TableHead>Título</TableHead>
+            <TableHead className="text-center">Status</TableHead>
+            <TableHead>Criado em</TableHead>
+            <TableHead>Vencimento em</TableHead>
+            <TableHead>Finalizado em</TableHead>
+            <TableHead className="text-center">Ações</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {tasks.map((task) =>(
+            <TableRow key={task.id}>
+              <TableCell className="font-medium">{task.id}</TableCell>
+              <TableCell>{task.title}</TableCell>
+              <TableCell className={`${getStatusClass(task.status)} flex items-center justify-center rounded-md`}>
+
+                {task.status}
+
+              </TableCell>
+              <TableCell>{new Date(task.createdAt).toLocaleDateString('pt-BR')}</TableCell>
+              <TableCell>{task.duDate ? new Date(task.duDate).toLocaleDateString('pt-BR') : ''}</TableCell>
+              <TableCell>{task.finishedAt ? new Date(task.finishedAt).toLocaleDateString('pt-BR') : ''}</TableCell>
+              <TableCell className="flex items-center justify-between">
+                <Button className="bg-red-700">
+                  <Trash/>
+                </Button>
+                <Button className="bg-yellow-700">
+                  <Pencil/>
+                </Button>
+                <Button disabled={task.finishedAt != null} onClick={task.finishedAt == null ? () => handleFinishedTask(task.id): undefined} className={`${task.finishedAt == null ? 'bg-green-800 hover:opacity-50' : 'bg-green-950 hover:opacity-50 disabled: opacity-50'}`}>
+                  <CircleCheck/>
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+        <div className="flex items-center justify-center gap-4 mt-6">
+          <Button onClick={() => setPage(currentPage - 1)} disabled={currentPage <= 1} >Anterior</Button>
+          <p>{currentPage}</p>
+          <Button onClick={() => setPage(currentPage + 1)} disabled={currentPage >= totalPages} >Próximo</Button>
+        </div>
+
+    </div>
   )
 }

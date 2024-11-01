@@ -9,6 +9,9 @@ interface newTask {
 
 interface TaskContextType {
   tasks: Task[]
+  totalPages: number
+  page: number
+  setPage: (page: number) => void
   finishedTask: (id: number) => void
   createTask: (data: newTask) => void
 }
@@ -21,11 +24,14 @@ interface TaskProviderProps{
 
 export function TaskProvider({children}: TaskProviderProps){
   const [tasks, setTasks] = useState<Task[] | []>([])
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
 
-  async function getTasks() {
+  async function getTasks(page: number) {
     try {
-      const response = await api.get("/task")
-      setTasks(response.data)
+      const response = await api.get(`/task?page=${page - 1}`)
+      setTasks(response.data.content)
+      setTotalPages(response.data.totalPages)
     } catch (error) {
       console.error('Falha ao buscar tasks', error)
     }
@@ -43,20 +49,23 @@ export function TaskProvider({children}: TaskProviderProps){
   async function finishedTask(id: number) {
     try {
       await api.post(`/task/${id}`)
-      getTasks()
+      getTasks(page)
     } catch (error) {
       console.error('Falha ao finalizar tarefa!', error)
     }    
   }
 
   useEffect(()=>{
-    getTasks()
-  }, [])
+    getTasks(page)
+  }, [page])
 
   return(
     <TaskContext.Provider 
     value={{
       tasks,
+      page,
+      setPage,
+      totalPages,
       finishedTask,
       createTask
     }}>
