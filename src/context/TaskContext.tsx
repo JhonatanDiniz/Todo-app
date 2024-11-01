@@ -4,6 +4,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface TaskContextType {
   tasks: Task[]
+  finishedTask: (id: number) => void
 }
 
 export const TaskContext = createContext({} as TaskContextType)
@@ -24,6 +25,15 @@ export function TaskProvider({children}: TaskProviderProps){
     }
   }
 
+  async function finishedTask(id: number) {
+    try {
+      await api.post(`/task/${id}`)
+      getTasks()
+    } catch (error) {
+      console.error('Falha ao finalizar tarefa!', error)
+    }    
+  }
+
   useEffect(()=>{
     getTasks()
   }, [])
@@ -31,7 +41,8 @@ export function TaskProvider({children}: TaskProviderProps){
   return(
     <TaskContext.Provider 
     value={{
-      tasks
+      tasks,
+      finishedTask
     }}>
       {children}
     </TaskContext.Provider>

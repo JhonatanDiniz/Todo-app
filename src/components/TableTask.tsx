@@ -12,7 +12,7 @@ import { CircleCheck, Pencil, Trash } from "lucide-react"
 import { useContext } from "react"
 
 export default function TableTask() {
-  const { tasks } = useContext(TaskContext)
+  const { tasks, finishedTask } = useContext(TaskContext)
 
   const getStatusClass = (status: string)=>{
     switch(status){
@@ -23,6 +23,10 @@ export default function TableTask() {
       case 'Atrasado':
         return 'bg-red-800'
     }
+  }
+
+  async function handleFinishedTask(id: number) {
+    return finishedTask(id)
   }
 
   return (
@@ -60,7 +64,7 @@ export default function TableTask() {
                 <Pencil className="text-yellow-700"/>
               </div>
               <div>
-                <CircleCheck className="text-green-800"/>
+                <CircleCheck onClick={task.finishedAt == null ? () => handleFinishedTask(task.id): undefined} className={`${task.finishedAt == null ? 'text-green-800 cursor-pointer' : 'text-green-950 cursor-not-allowed'}`}/>
               </div>
             </TableCell>
           </TableRow>
