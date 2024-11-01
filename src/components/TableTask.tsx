@@ -10,6 +10,7 @@ import {
 import { TaskContext } from "@/context/TaskContext"
 import { CircleCheck, Pencil, Trash } from "lucide-react"
 import { useContext } from "react"
+import { Button } from "./ui/button"
 
 export default function TableTask() {
   const { tasks, finishedTask } = useContext(TaskContext)
@@ -36,7 +37,7 @@ export default function TableTask() {
         <TableRow>
           <TableHead className="w-[100px]">Id</TableHead>
           <TableHead>Título</TableHead>
-          <TableHead>Status</TableHead>
+          <TableHead className="text-center">Status</TableHead>
           <TableHead>Criado em</TableHead>
           <TableHead>Vencimento em</TableHead>
           <TableHead>Finalizado em</TableHead>
@@ -48,24 +49,24 @@ export default function TableTask() {
           <TableRow key={task.id}>
             <TableCell className="font-medium">{task.id}</TableCell>
             <TableCell>{task.title}</TableCell>
-            <TableCell>
-              <div className={`${getStatusClass(task.status)} w-1/2 flex items-center justify-center p-1 rounded-md`}>
+            <TableCell className={`${getStatusClass(task.status)} flex items-center justify-center rounded-md`}>
+
               {task.status}
-              </div>
+
             </TableCell>
             <TableCell>{new Date(task.createdAt).toLocaleDateString('pt-BR')}</TableCell>
             <TableCell>{task.duDate ? new Date(task.duDate).toLocaleDateString('pt-BR') : ''}</TableCell>
             <TableCell>{task.finishedAt ? new Date(task.finishedAt).toLocaleDateString('pt-BR') : ''}</TableCell>
             <TableCell className="flex items-center justify-between">
-              <div>
-                <Trash className="text-red-700"/>
-              </div>
-              <div>
-                <Pencil className="text-yellow-700"/>
-              </div>
-              <div>
-                <CircleCheck onClick={task.finishedAt == null ? () => handleFinishedTask(task.id): undefined} className={`${task.finishedAt == null ? 'text-green-800 cursor-pointer' : 'text-green-950 cursor-not-allowed'}`}/>
-              </div>
+              <Button className="bg-red-700">
+                <Trash/>
+              </Button>
+              <Button className="bg-yellow-700">
+                <Pencil/>
+              </Button>
+              <Button disabled={task.finishedAt != null} onClick={task.finishedAt == null ? () => handleFinishedTask(task.id): undefined} className={`${task.finishedAt == null ? 'bg-green-800 hover:opacity-50' : 'bg-green-950 hover:opacity-50 disabled: opacity-50'}`}>
+                <CircleCheck/>
+              </Button>
             </TableCell>
           </TableRow>
         ))}
