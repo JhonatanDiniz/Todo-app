@@ -8,18 +8,17 @@ import {
 import { ReactNode } from "react"
 
 interface ModalDialogProps {
-  textButton: string
-  styleClass: string
+  textButton: string | ReactNode
+  styleClass?: string
   titleModal: string
-
   children: ReactNode
 }
 
 export default function ModalDialog({textButton, styleClass, titleModal, children}: ModalDialogProps){
   return(
     <Dialog>
-      <DialogTrigger className={styleClass}>{textButton}</DialogTrigger>
-      <DialogContent>
+      <DialogTrigger asChild className={styleClass}>{textButton}</DialogTrigger>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{titleModal}</DialogTitle>
         </DialogHeader>

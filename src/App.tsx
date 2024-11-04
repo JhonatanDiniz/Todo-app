@@ -1,7 +1,9 @@
+import { Plus } from "lucide-react";
 import FormNewTask from "./components/FormNewTask";
 import Header from "./components/Header";
 import ModalDialog from "./components/ModalDialog";
 import TableTask from "./components/TableTask";
+import { Button } from "./components/ui/button";
 
 export default function App() {
   return (
@@ -10,8 +12,12 @@ export default function App() {
       <div className="container mx-auto mt-12">
         <div className="flex items-center justify-end">
           <ModalDialog
-            textButton="Adicionar Tarefa"
-            styleClass="bg-muted-foreground p-2 rounded-md"
+            textButton={
+              <Button className="bg-muted-foreground p-2 rounded-md hover:bg-muted hover:text-foreground">
+                <Plus/>
+                Adicionar Tarefa
+              </Button>
+            }
             titleModal="Adicionar nova Tarefa"
             children=<FormNewTask/>
           />

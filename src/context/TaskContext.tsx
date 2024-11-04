@@ -3,6 +3,7 @@ import { Task } from "@/types/Task";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface newTask {
+  id?: number 
   title: string
   description: string
 }
@@ -13,6 +14,7 @@ interface TaskContextType {
   page: number
   setPage: (page: number) => void
   finishedTask: (id: number) => void
+  editTask: (data: newTask) => void
   createTask: (data: newTask) => void
 }
 
@@ -41,9 +43,19 @@ export function TaskProvider({children}: TaskProviderProps){
     try {
       const response = await api.post('/task', data)
       setTasks((state) => [response.data, ...state])
+      getTasks(page)
     } catch (error) {
       console.error('Falha ao buscar tasks', error)
     }
+  }
+
+  async function editTask(data: newTask) {
+    try {
+      await api.put(`/task/${data.id}`, data)
+      getTasks(page)
+    } catch (error) {
+      console.error('Falha ao buscar tasks', error)
+    }    
   }
 
   async function finishedTask(id: number) {
@@ -67,6 +79,7 @@ export function TaskProvider({children}: TaskProviderProps){
       setPage,
       totalPages,
       finishedTask,
+      editTask,
       createTask
     }}>
       {children}

@@ -11,6 +11,8 @@ import { TaskContext } from "@/context/TaskContext"
 import { CircleCheck, Pencil, Trash } from "lucide-react"
 import { useContext } from "react"
 import { Button } from "./ui/button"
+import ModalDialog from "./ModalDialog"
+import FormEditTask from "./FormEditTask"
 
 export default function TableTask() {
   const { tasks, finishedTask, page, setPage, totalPages } = useContext(TaskContext)
@@ -60,12 +62,24 @@ export default function TableTask() {
               <TableCell>{task.duDate ? new Date(task.duDate).toLocaleDateString('pt-BR') : ''}</TableCell>
               <TableCell>{task.finishedAt ? new Date(task.finishedAt).toLocaleDateString('pt-BR') : ''}</TableCell>
               <TableCell className="flex items-center justify-between">
+
+                {/* button delete */}
                 <Button className="bg-red-700">
                   <Trash/>
                 </Button>
-                <Button className="bg-yellow-700">
+
+                {/* button edit */}
+                <ModalDialog
+                 titleModal="Editar Tarefa"
+                 children= {<FormEditTask task={task} />}
+                 textButton={
+                  <Button className="bg-yellow-700">
                   <Pencil/>
                 </Button>
+                 }
+                />
+
+                 {/* button finished task */}
                 <Button disabled={task.finishedAt != null} onClick={task.finishedAt == null ? () => handleFinishedTask(task.id): undefined} className={`${task.finishedAt == null ? 'bg-green-800 hover:opacity-50' : 'bg-green-950 hover:opacity-50 disabled: opacity-50'}`}>
                   <CircleCheck/>
                 </Button>
