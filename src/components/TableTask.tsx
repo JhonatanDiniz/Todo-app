@@ -7,6 +7,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { TaskContext } from "@/context/TaskContext"
 import { CircleCheck, Pencil, Trash } from "lucide-react"
 import { useContext } from "react"
@@ -15,7 +25,7 @@ import ModalDialog from "./ModalDialog"
 import FormEditTask from "./FormEditTask"
 
 export default function TableTask() {
-  const { tasks, finishedTask, page, setPage, totalPages } = useContext(TaskContext)
+  const { tasks, finishedTask, page, setPage, totalPages, deleteTask } = useContext(TaskContext)
   const currentPage = page
 
   const getStatusClass = (status: string)=>{
@@ -27,6 +37,10 @@ export default function TableTask() {
       case 'Atrasado':
         return 'bg-red-800'
     }
+  }
+
+  async function handleDeleteTask(id: number) {
+    return deleteTask(id)
   }
 
   async function handleFinishedTask(id: number) {
@@ -64,9 +78,22 @@ export default function TableTask() {
               <TableCell className="flex items-center justify-between">
 
                 {/* button delete */}
-                <Button className="bg-red-700">
-                  <Trash/>
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button className="bg-red-700">
+                      <Trash/>
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Tem certeza que deseja excluir a tarefa?</AlertDialogTitle>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => handleDeleteTask(task.id)}>Excluir</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
 
                 {/* button edit */}
                 <ModalDialog

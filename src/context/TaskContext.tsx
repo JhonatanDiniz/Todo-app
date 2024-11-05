@@ -16,6 +16,7 @@ interface TaskContextType {
   finishedTask: (id: number) => void
   editTask: (data: newTask) => void
   createTask: (data: newTask) => void
+  deleteTask: (id: number) => void
 }
 
 export const TaskContext = createContext({} as TaskContextType)
@@ -58,6 +59,15 @@ export function TaskProvider({children}: TaskProviderProps){
     }    
   }
 
+  async function deleteTask(id: number) {
+    try {
+      await api.delete(`/task/${id}`)
+      getTasks(page)
+    } catch (error) {
+      console.error('Falha ao excluir tarefa!', error)
+    }    
+  }
+
   async function finishedTask(id: number) {
     try {
       await api.post(`/task/${id}`)
@@ -80,7 +90,8 @@ export function TaskProvider({children}: TaskProviderProps){
       totalPages,
       finishedTask,
       editTask,
-      createTask
+      createTask,
+      deleteTask
     }}>
       {children}
     </TaskContext.Provider>
