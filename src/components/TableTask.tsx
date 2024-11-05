@@ -68,13 +68,24 @@ export default function TableTask() {
               <TableCell className="font-medium">{task.id}</TableCell>
               <TableCell>{task.title}</TableCell>
               <TableCell className={`${getStatusClass(task.status)} flex items-center justify-center rounded-md`}>
-
                 {task.status}
-
               </TableCell>
-              <TableCell>{new Date(task.createdAt).toLocaleDateString('pt-BR')}</TableCell>
-              <TableCell>{task.duDate ? new Date(task.duDate).toLocaleDateString('pt-BR') : ''}</TableCell>
-              <TableCell>{task.finishedAt ? new Date(task.finishedAt).toLocaleDateString('pt-BR') : ''}</TableCell>
+              
+              <TableCell>
+                {new Date(new Date(task.createdAt)
+                  .getTime() + new Date(task.createdAt).getTimezoneOffset() * 60000)
+                  .toLocaleDateString('pt-BR', { day: "2-digit", month: "2-digit", year: "numeric" }
+                )}
+              </TableCell>
+
+              <TableCell>{task.duDate ? new Date(task.duDate).toLocaleDateString('pt-BR', {day: "2-digit", month: "2-digit", year: "numeric"}) : ''}</TableCell>
+
+              <TableCell>
+                {task.finishedAt ? 
+                  new Date(new Date(task.createdAt)
+                  .getTime() + new Date(task.createdAt).getTimezoneOffset() * 60000)
+                  .toLocaleDateString('pt-BR', { day: "2-digit", month: "2-digit", year: "numeric" }) : ''}
+              </TableCell>
               <TableCell className="flex items-center justify-between">
 
                 {/* button delete */}
