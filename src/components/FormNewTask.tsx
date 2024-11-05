@@ -7,7 +7,8 @@ import { TaskContext } from '@/context/TaskContext'
 
 const taskFormSchema = z.object({
   title: z.string(),
-  description: z.string()
+  description: z.string(),
+  dueDate: z.string()
 })
 
 type TaskFormInputs = z.infer<typeof taskFormSchema>
@@ -20,6 +21,7 @@ export default function FormNewTask(){
   })
 
   async function handleCreateTask(data: TaskFormInputs){
+    console.log(data)
     createTask(data)
     reset()
   }
@@ -34,6 +36,11 @@ export default function FormNewTask(){
       <div className='flex flex-col gap-1'>
         <label htmlFor="title">Descrição</label>
         <textarea className='border-2 p-1 border-muted-foreground rounded-md' {...register('description')} placeholder='Descrição da Tarefa' />
+      </div>
+
+      <div className='flex flex-col gap-1'>
+        <label htmlFor="title">Vencimento</label>
+        <input className='border-2 p-1 border-muted-foreground rounded-md' type="date" {...register('dueDate')}/>
       </div>
 
       <Button>Cadastrar</Button>

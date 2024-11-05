@@ -78,7 +78,12 @@ export default function TableTask() {
                 )}
               </TableCell>
 
-              <TableCell>{task.duDate ? new Date(task.duDate).toLocaleDateString('pt-BR', {day: "2-digit", month: "2-digit", year: "numeric"}) : ''}</TableCell>
+              <TableCell>
+              {task.dueDate ? 
+                  new Date(new Date(task.dueDate)
+                  .getTime() + new Date(task.dueDate).getTimezoneOffset() * 60000)
+                  .toLocaleDateString('pt-BR', { day: "2-digit", month: "2-digit", year: "numeric" }) : ''}
+              </TableCell>
 
               <TableCell>
                 {task.finishedAt ? 

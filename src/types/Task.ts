@@ -4,6 +4,6 @@ export interface Task {
   description: string
   status: string
   createdAt: Date
-  duDate: Date
+  dueDate: Date
   finishedAt: Date
 }

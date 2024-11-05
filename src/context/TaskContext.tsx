@@ -5,6 +5,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 interface newTask {
   id?: number 
   title: string
+  dueDate: string
   description: string
 }
 
@@ -33,6 +34,7 @@ export function TaskProvider({children}: TaskProviderProps){
   async function getTasks(page: number) {
     try {
       const response = await api.get(`/task?page=${page - 1}`)
+      console.log(response.data)
       setTasks(response.data.content)
       setTotalPages(response.data.totalPages)
     } catch (error) {
