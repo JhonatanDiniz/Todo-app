@@ -1,6 +1,7 @@
 import { api } from "@/lib/axios";
 import { Task } from "@/types/Task";
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { AuthContext } from "./AuthContext";
 
 interface newTask {
   id?: number 
@@ -27,6 +28,7 @@ interface TaskProviderProps{
 }
 
 export function TaskProvider({children}: TaskProviderProps){
+  const authContext = useContext(AuthContext)
   const [tasks, setTasks] = useState<Task[] | []>([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -34,7 +36,6 @@ export function TaskProvider({children}: TaskProviderProps){
   async function getTasks(page: number) {
     try {
       const response = await api.get(`/task?page=${page - 1}`)
-      console.log(response.data)
       setTasks(response.data.content)
       setTotalPages(response.data.totalPages)
     } catch (error) {
@@ -80,8 +81,10 @@ export function TaskProvider({children}: TaskProviderProps){
   }
 
   useEffect(()=>{
-    getTasks(page)
-  }, [page])
+    if (authContext?.isAuthenticated){
+      getTasks(page)
+    }
+  }, [page, authContext?.isAuthenticated])
 
   return(
     <TaskContext.Provider 

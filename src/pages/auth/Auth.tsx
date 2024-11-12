@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useContext } from "react";
+import { AuthContext } from "@/context/AuthContext";
 
 const authFormSchema = z.object({
   email: z.string(),
@@ -11,14 +13,14 @@ const authFormSchema = z.object({
 type AuthFormInputs = z.infer<typeof authFormSchema>
 
 export default function Auth(){
-
+  const {signin} = useContext(AuthContext)
 
   const{register, handleSubmit, reset} = useForm<AuthFormInputs>({
     resolver: zodResolver(authFormSchema)
   })
 
   async function handleSignin(data: AuthFormInputs){
-    console.log(data)
+    signin(data)
     reset()
   }
   return(
