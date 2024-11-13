@@ -24,15 +24,14 @@ export default function Auth(){
     reset()
   }
   return(
-    <div className="flex items-center justify-center min-h-screen">
       <form onSubmit={handleSubmit(handleSignin)} className="flex flex-col gap-4 border-2 border-muted-foreground rounded-md p-8 min-w-96">
         <h1 className="text-xl">Login</h1>
         <div className='flex flex-col gap-1'>
-          <label htmlFor="title">Login</label>
+          <label htmlFor="email">Login</label>
           <input className='text-foreground border-2 p-2 border-muted-foreground rounded-md' type="text" {...register("email")} placeholder='Entre com e-mail' />
         </div>
         <div className='flex flex-col gap-1'>
-          <label htmlFor="title">Senha</label>
+          <label htmlFor="senha">Senha</label>
           <input className='text-foreground border-2 p-2 border-muted-foreground rounded-md' type="password" {...register("password")} placeholder='Informe sua senha' />
         </div>
         <Button>Entrar</Button>
@@ -41,6 +40,5 @@ export default function Auth(){
           <p className="text-md font-bold text-red-900">Clique aqui!</p>
         </div>
       </form>
-    </div>
   )
 }

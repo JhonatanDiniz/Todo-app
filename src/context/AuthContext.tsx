@@ -7,9 +7,16 @@ interface signinProps {
   password: string
 }
 
+interface signupProps {
+  name: string
+  email: string
+  password: string
+}
+
 interface AuthContextType {
   isAuthenticated: boolean
   signin: (data: signinProps) => Promise<void>
+  signup: (data: signupProps) => Promise<void>
 }
 
 export const AuthContext = createContext({} as AuthContextType)
@@ -34,6 +41,14 @@ export function AuthProvider({children}: AuthProviderProps){
     }
   }
 
+  async function signup(data: signupProps) {
+    try {
+      await api.post('user', data)
+    } catch (error) {
+      console.error('Erro ao cadastrar usuário:', error)
+    }
+  }
+
   useEffect(()=>{
     const token = sessionStorage.getItem('Token')
     if(token){
@@ -45,7 +60,8 @@ export function AuthProvider({children}: AuthProviderProps){
     <AuthContext.Provider 
     value={{
       isAuthenticated,
-      signin
+      signin,
+      signup
     }}>
       {children}
     </AuthContext.Provider>
